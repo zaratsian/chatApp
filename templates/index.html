@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <title>Antidote Demo Chat App</title>
+    
+    
+    <style>
+        table {
+          font-family: arial, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+        }
+        
+        td, th {
+          border: 1px solid #dddddd;
+          text-align: left;
+          padding: 8px;
+        }
+        
+        tr:nth-child(even) {
+          background-color: #dddddd;
+          width: 1000px;
+        }
+    </style>
+    
+  </head>
+  <body>
+
+    <br>
+
+    <form action="" method="POST">
+      <input type="text" class="username" placeholder="Username"/>
+      <input type="text" class="message"  placeholder="Message"/>
+      <input type="submit"/>
+    </form>
+    
+    <h3>Welcome! Enter username and message to get started.</h3>
+
+    <h1>Chat Log</h1>
+    <!--<div class="chatlog"></div>-->
+    
+
+    <table class="ztest">
+        <colgroup>
+           <col span="1" style="width: 10%;">
+           <col span="1" style="width: 90%;">
+        </colgroup>
+    </table>
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var socket = io();
+
+      socket.on( 'connect', function() {
+        
+        var form = $( 'form' ).on( 'submit', function( e ) {
+            e.preventDefault()
+            let user_name  = $( 'input.username' ).val()
+            let user_input = $( 'input.message' ).val()
+            socket.emit( 'my event', {
+                user_name : user_name,
+                message : user_input
+            })
+            $( 'input.message' ).val( '' ).focus()
+        })
+      })
+      
+      socket.on( 'my response', function( msg ) {
+        console.log( msg )
+        if( typeof msg.user_name !== 'undefined' ) {
+            $( 'h3' ).remove()
+            //$( 'div.chatlog' ).prepend( '<div><b style="color: #000">'+msg.user_name+'</b> '+msg.message+'</div>' )
+            $( 'table.ztest').prepend( '<tr><td>'+msg.user_name+'</td><td>'+msg.message+'</td></tr>')
+        }
+      })
+    </script>
+
+  </body>
+  </html>
+
