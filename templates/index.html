@@ -1,7 +1,7 @@
 <!DOCTYPE html>
   <html>
   <head>
-    <title>Antidote Demo Chat App</title>
+    <title>Chat App</title>
     
     
     <style>
@@ -37,10 +37,9 @@
     <h3>Welcome! Enter username and message to get started.</h3>
 
     <h1>Chat Log</h1>
-    <!--<div class="chatlog"></div>-->
-    
 
-    <table class="ztest">
+
+    <table class="chatlog">
         <colgroup>
            <col span="1" style="width: 10%;">
            <col span="1" style="width: 90%;">
@@ -60,7 +59,7 @@
             e.preventDefault()
             let user_name  = $( 'input.username' ).val()
             let user_input = $( 'input.message' ).val()
-            socket.emit( 'my event', {
+            socket.emit( 'event', {
                 user_name : user_name,
                 message : user_input
             })
@@ -68,12 +67,12 @@
         })
       })
       
-      socket.on( 'my response', function( msg ) {
+      socket.on( 'response', function( msg ) {
         console.log( msg )
-        if( typeof msg.user_name !== 'undefined' ) {
+        if( typeof msg.user_name !== 'undefined' && msg.user_name !== "") {
             $( 'h3' ).remove()
             //$( 'div.chatlog' ).prepend( '<div><b style="color: #000">'+msg.user_name+'</b> '+msg.message+'</div>' )
-            $( 'table.ztest').prepend( '<tr><td>'+msg.user_name+'</td><td>'+msg.message+'</td></tr>')
+            $( 'table.chatlog').prepend( '<tr><td>'+msg.user_name+'</td><td>'+msg.message+'</td></tr>')
         }
       })
     </script>
